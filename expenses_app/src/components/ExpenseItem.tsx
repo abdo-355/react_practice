@@ -1,12 +1,14 @@
 import "./ExpenceItem.css";
 
-const ExpenseItem: React.FC = () => {
+import { Expense } from "../App";
+
+const ExpenseItem: React.FC<Expense> = ({ date, title, amount }) => {
   return (
     <div className="expense-item">
-      <div>November 19th 2022</div>
+      <div>{date.toISOString()}</div>
       <div className="expense-item__description">
-        <h2>Internet subscription</h2>
-        <div className="expense-item__price">$14,95</div>
+        <h2>{title}</h2>
+        <div className="expense-item__price">${amount}</div>
       </div>
     </div>
   );
