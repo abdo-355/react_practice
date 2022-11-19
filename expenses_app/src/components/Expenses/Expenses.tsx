@@ -1,5 +1,5 @@
 import { ExpenseItemProps } from "./ExpenseItem";
-import Card from "./Card";
+import Card from "../UI/Card";
 import ExpenseItem from "./ExpenseItem";
 
 import "./Expenses.css";

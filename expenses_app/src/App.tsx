@@ -1,5 +1,5 @@
-import { ExpenseItemProps } from "./components/ExpenseItem";
-import Expenses from "./components/Expenses";
+import { ExpenseItemProps } from "./components/Expenses/ExpenseItem";
+import Expenses from "./components/Expenses/Expenses";
 
 const App: React.FC = () => {
   const expenses: ExpenseItemProps[] = [
