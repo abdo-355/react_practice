@@ -1,14 +1,7 @@
-import ExpenseItem from "./components/ExpenseItem";
-
-export interface Expense {
-  id: string;
-  title: string;
-  amount: number;
-  date: Date;
-}
+import ExpenseItem, { ExpenseItemProps } from "./components/ExpenseItem";
 
 const App: React.FC = () => {
-  const expenses: Expense[] = [
+  const expenses: ExpenseItemProps[] = [
     {
       id: "e1",
       title: "Toilet Paper",

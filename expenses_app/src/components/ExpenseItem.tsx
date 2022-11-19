@@ -1,11 +1,18 @@
-import "./ExpenceItem.css";
+import ExpenseDate from "./ExpenseDate";
 
-import { Expense } from "../App";
+import "./ExpenseItem.css";
 
-const ExpenseItem: React.FC<Expense> = ({ date, title, amount }) => {
+export interface ExpenseItemProps {
+  id: string;
+  title: string;
+  amount: number;
+  date: Date;
+}
+
+const ExpenseItem: React.FC<ExpenseItemProps> = ({ date, title, amount }) => {
   return (
     <div className="expense-item">
-      <div>{date.toISOString()}</div>
+      <ExpenseDate date={date} />
       <div className="expense-item__description">
         <h2>{title}</h2>
         <div className="expense-item__price">${amount}</div>
