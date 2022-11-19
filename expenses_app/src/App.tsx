@@ -1,4 +1,5 @@
-import ExpenseItem, { ExpenseItemProps } from "./components/ExpenseItem";
+import { ExpenseItemProps } from "./components/ExpenseItem";
+import Expenses from "./components/Expenses";
 
 const App: React.FC = () => {
   const expenses: ExpenseItemProps[] = [
@@ -26,9 +27,7 @@ const App: React.FC = () => {
   return (
     <div className="App">
       <h1>Hi there</h1>
-      {expenses.map((expense) => (
-        <ExpenseItem {...expense} />
-      ))}
+      <Expenses expenses={expenses} />
     </div>
   );
 };
