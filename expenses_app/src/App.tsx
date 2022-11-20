@@ -1,5 +1,6 @@
 import { ExpenseItemProps } from "./components/Expenses/ExpenseItem";
 import Expenses from "./components/Expenses/Expenses";
+import NewExpense from "./components/NewExpense/NewExpense";
 
 const App: React.FC = () => {
   const expenses: ExpenseItemProps[] = [
@@ -26,7 +27,7 @@ const App: React.FC = () => {
 
   return (
     <div className="App">
-      <h1>Hi there</h1>
+      <NewExpense />
       <Expenses expenses={expenses} />
     </div>
   );
