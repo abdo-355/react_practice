@@ -1,11 +1,11 @@
-import { ExpenseItemProps } from "./ExpenseItem";
+import { IExpenseItem } from "./ExpenseItem";
 import Card from "../UI/Card";
 import ExpenseItem from "./ExpenseItem";
 
 import "./Expenses.css";
 
 interface Props {
-  expenses: ExpenseItemProps[];
+  expenses: IExpenseItem[];
 }
 
 const Expenses: React.FC<Props> = ({ expenses }) => {

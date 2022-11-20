@@ -1,9 +1,11 @@
-import { ExpenseItemProps } from "./components/Expenses/ExpenseItem";
+import { useState } from "react";
+
+import { IExpenseItem } from "./components/Expenses/ExpenseItem";
 import Expenses from "./components/Expenses/Expenses";
 import NewExpense from "./components/NewExpense/NewExpense";
 
 const App: React.FC = () => {
-  const expenses: ExpenseItemProps[] = [
+  const [expenses, setExpenses] = useState<IExpenseItem[]>([
     {
       id: "e1",
       title: "Toilet Paper",
@@ -23,11 +25,15 @@ const App: React.FC = () => {
       amount: 450,
       date: new Date(2021, 5, 12),
     },
-  ];
+  ]);
+
+  const newExpenseHandler = (newExpense: IExpenseItem) => {
+    setExpenses((prev) => [...prev, newExpense]);
+  };
 
   return (
     <div className="App">
-      <NewExpense />
+      <NewExpense onNewExpense={newExpenseHandler} />
       <Expenses expenses={expenses} />
     </div>
   );

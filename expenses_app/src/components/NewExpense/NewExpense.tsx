@@ -1,7 +1,14 @@
 import { useState, ChangeEvent, FormEvent } from "react";
+
 import "./NewExpense.css";
 
-const NewExpense: React.FC = () => {
+import { IExpenseItem } from "../Expenses/ExpenseItem";
+
+interface Props {
+  onNewExpense: (newExpense: IExpenseItem) => void;
+}
+
+const NewExpense: React.FC<Props> = ({ onNewExpense }) => {
   const [titleValue, setTitleValue] = useState("");
   const [amountValue, setAmountValue] = useState("");
   const [dateValue, setDateValue] = useState("");
@@ -20,16 +27,17 @@ const NewExpense: React.FC = () => {
     e.preventDefault();
 
     const expenseData = {
+      id: Math.random().toString(),
       title: titleValue,
-      amount: amountValue,
+      amount: +amountValue,
       date: new Date(dateValue),
     };
-
-    console.log(expenseData);
 
     setTitleValue("");
     setAmountValue("");
     setDateValue("");
+
+    onNewExpense(expenseData);
   };
 
   return (

@@ -3,14 +3,14 @@ import Card from "../UI/Card";
 
 import "./ExpenseItem.css";
 
-export interface ExpenseItemProps {
+export interface IExpenseItem {
   id: string;
   title: string;
   amount: number;
   date: Date;
 }
 
-const ExpenseItem: React.FC<ExpenseItemProps> = ({ date, title, amount }) => {
+const ExpenseItem: React.FC<IExpenseItem> = ({ date, title, amount }) => {
   return (
     <Card className="expense-item">
       <ExpenseDate date={date} />
