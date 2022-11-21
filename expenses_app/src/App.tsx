@@ -28,7 +28,7 @@ const App: React.FC = () => {
   ]);
 
   const newExpenseHandler = (newExpense: IExpenseItem) => {
-    setExpenses((prev) => [...prev, newExpense]);
+    setExpenses((prev) => [newExpense, ...prev]);
   };
 
   return (
