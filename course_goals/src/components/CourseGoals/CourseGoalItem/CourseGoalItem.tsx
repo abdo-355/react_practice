@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 
-import "./CourseGoalItem.css";
+import styles from "./CourseGoalItem.module.css";
 
 interface Props {
   id: string;
@@ -17,7 +17,7 @@ const CourseGoalItem: React.FC<Props> = (props) => {
   };
 
   return (
-    <li className="goal-item" onClick={deleteHandler}>
+    <li className={styles["goal-item"]} onClick={deleteHandler}>
       {props.children}
     </li>
   );
