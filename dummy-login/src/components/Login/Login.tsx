@@ -1,12 +1,16 @@
-import { useEffect, useReducer, ChangeEvent, FormEvent, Reducer } from "react";
+import {
+  useEffect,
+  useReducer,
+  ChangeEvent,
+  FormEvent,
+  Reducer,
+  useContext,
+} from "react";
 
 import Card from "../UI/Card/Card";
 import classes from "./Login.module.css";
 import Button from "../UI/Button/Button";
-
-interface Props {
-  onLogin: (a: string, b: string) => void;
-}
+import AuthContext from "../../context/auth-context";
 
 interface FormState {
   email: { value: string; isValid: boolean | null };
@@ -53,12 +57,14 @@ const formReducer: Reducer<FormState, ReducerAction> = (state, action) => {
   }
 };
 
-const Login: React.FC<Props> = ({ onLogin }) => {
+const Login = () => {
   const formInitialState: FormState = {
     email: { value: "", isValid: null },
     password: { value: "", isValid: null },
     isValid: false,
   };
+
+  const { onLogin } = useContext(AuthContext);
 
   const [formState, dispatchForm] = useReducer(formReducer, formInitialState);
 
@@ -94,7 +100,7 @@ const Login: React.FC<Props> = ({ onLogin }) => {
 
   const submitHandler = (event: FormEvent) => {
     event.preventDefault();
-    onLogin(formState.email.value, formState.password.value);
+    onLogin!(formState.email.value, formState.password.value);
   };
 
   return (
