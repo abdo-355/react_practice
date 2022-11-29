@@ -11,6 +11,7 @@ import Card from "../UI/Card/Card";
 import classes from "./Login.module.css";
 import Button from "../UI/Button/Button";
 import AuthContext from "../../context/auth-context";
+import Input from "../UI/Input/Input";
 
 interface FormState {
   email: { value: string; isValid: boolean | null };
@@ -106,32 +107,20 @@ const Login = () => {
   return (
     <Card className={classes.login}>
       <form onSubmit={submitHandler}>
-        <div
-          className={`${classes.control} ${
-            formState.email.isValid === false ? classes.invalid : ""
-          }`}
-        >
-          <label htmlFor="email">E-Mail</label>
-          <input
-            type="email"
-            id="email"
-            value={formState.email.value}
-            onChange={emailChangeHandler}
-          />
-        </div>
-        <div
-          className={`${classes.control} ${
-            formState.password.isValid === false ? classes.invalid : ""
-          }`}
-        >
-          <label htmlFor="password">Password</label>
-          <input
-            type="password"
-            id="password"
-            value={formState.password.value}
-            onChange={passwordChangeHandler}
-          />
-        </div>
+        <Input
+          data={formState.email}
+          id="email"
+          label="E-Mail"
+          type="email"
+          ChangeHandler={emailChangeHandler}
+        />
+        <Input
+          data={formState.password}
+          id="password"
+          label="Password"
+          type="password"
+          ChangeHandler={passwordChangeHandler}
+        />
         <div className={classes.actions}>
           <Button
             type="submit"
