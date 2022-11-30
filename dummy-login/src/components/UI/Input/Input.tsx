@@ -1,4 +1,4 @@
-import { ChangeEventHandler } from "react";
+import React, { ChangeEventHandler, useRef, useImperativeHandle } from "react";
 
 import classes from "./Input.module.css";
 
@@ -10,24 +10,41 @@ interface Props {
   ChangeHandler: ChangeEventHandler<HTMLInputElement>;
 }
 
-const Input: React.FC<Props> = ({ data, id, label, type, ChangeHandler }) => {
-  return (
-    <>
-      <div
-        className={`${classes.control} ${
-          data.isValid === false ? classes.invalid : ""
-        }`}
-      >
-        <label htmlFor={id}>{label}</label>
-        <input
-          type={type}
-          id={id}
-          value={data.value}
-          onChange={ChangeHandler}
-        />
-      </div>
-    </>
-  );
-};
+interface Ref {
+  focus: () => void;
+}
+
+const Input = React.forwardRef<Ref, Props>(
+  ({ data, id, label, type, ChangeHandler }, ref) => {
+    const inputRef = useRef<HTMLInputElement>(null);
+
+    useImperativeHandle(ref, () => {
+      return {
+        focus() {
+          inputRef.current?.focus();
+        },
+      };
+    });
+
+    return (
+      <>
+        <div
+          className={`${classes.control} ${
+            data.isValid === false ? classes.invalid : ""
+          }`}
+        >
+          <label htmlFor={id}>{label}</label>
+          <input
+            ref={inputRef}
+            type={type}
+            id={id}
+            value={data.value}
+            onChange={ChangeHandler}
+          />
+        </div>
+      </>
+    );
+  }
+);
 
 export default Input;

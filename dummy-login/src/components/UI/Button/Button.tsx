@@ -6,23 +6,15 @@ interface Props {
   type?: "submit";
   className: string;
   onClick?: MouseEventHandler;
-  disabled: boolean;
   children: ReactNode;
 }
 
-const Button: React.FC<Props> = ({
-  type,
-  className,
-  onClick,
-  disabled,
-  children,
-}) => {
+const Button: React.FC<Props> = ({ type, className, onClick, children }) => {
   return (
     <button
       type={type || "button"}
       className={`${classes.button} ${className}`}
       onClick={onClick}
-      disabled={disabled}
     >
       {children}
     </button>
