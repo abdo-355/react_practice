@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Component } from "react";
 import User from "./User";
 
 import classes from "./Users.module.css";
@@ -9,29 +9,36 @@ const DUMMY_USERS = [
   { id: "u3", name: "Julie" },
 ];
 
-const Users: React.FC = () => {
-  const [showUsers, setShowUsers] = useState(true);
-
-  const toggleUsersHandler = () => {
-    setShowUsers((curState) => !curState);
+class Users extends Component<{}, { showUsers: boolean; more: string }> {
+  state = {
+    showUsers: true,
+    more: "lollol",
   };
 
-  const usersList = (
-    <ul>
-      {DUMMY_USERS.map((user) => (
-        <User key={user.id} name={user.name} />
-      ))}
-    </ul>
-  );
+  toggleUsersHandler = () => {
+    this.setState((prevState) => {
+      return { showUsers: !prevState.showUsers };
+    });
+  };
 
-  return (
-    <div className={classes.users}>
-      <button onClick={toggleUsersHandler}>
-        {showUsers ? "Hide" : "Show"} Users
-      </button>
-      {showUsers && usersList}
-    </div>
-  );
-};
+  render() {
+    const usersList = (
+      <ul>
+        {DUMMY_USERS.map((user) => (
+          <User key={user.id} name={user.name} />
+        ))}
+      </ul>
+    );
+
+    return (
+      <div className={classes.users}>
+        <button onClick={this.toggleUsersHandler}>
+          {this.state.showUsers ? "Hide" : "Show"} Users
+        </button>
+        {this.state.showUsers && usersList}
+      </div>
+    );
+  }
+}
 
 export default Users;
