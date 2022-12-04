@@ -1,11 +1,15 @@
+import { Component } from "react";
+
 import classes from "./User.module.css";
 
 interface Props {
   name: string;
 }
 
-const User: React.FC<Props> = ({ name }) => {
-  return <li className={classes.user}>{name}</li>;
-};
+class User extends Component<Props> {
+  render() {
+    return <li className={classes.user}>{this.props.name}</li>;
+  }
+}
 
 export default User;
