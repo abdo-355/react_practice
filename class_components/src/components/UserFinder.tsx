@@ -3,6 +3,7 @@ import { ChangeEvent, Component } from "react";
 import Users from "./Users";
 import classes from "./UserFinder.module.css";
 import UsersContext from "../store/users-context";
+import ErrorBoundary from "./ErrorBoundary";
 
 interface State {
   filteredUsers: { id: string; name: string }[];
@@ -49,7 +50,9 @@ class UserFinder extends Component<{}, State> {
         <div className={classes.finder}>
           <input type="search" onChange={this.searchChangeHandler} />
         </div>
-        <Users users={this.state.filteredUsers} />
+        <ErrorBoundary>
+          <Users users={this.state.filteredUsers} />
+        </ErrorBoundary>
       </>
     );
   }
