@@ -11,18 +11,19 @@ interface State {
 
 class UserFinder extends Component<{}, State> {
   static contextType = UsersContext;
-  // declare context: React.ContextType<typeof UsersContext>;
-  context!: React.ContextType<typeof UsersContext>;
+  declare context: React.ContextType<typeof UsersContext>;
 
   constructor(props: {}) {
     super(props);
 
-    const Users = this.context.users;
-
     this.state = {
-      filteredUsers: Users,
+      filteredUsers: [],
       searchTerm: "",
     };
+  }
+
+  componentDidMount(): void {
+    this.setState({ filteredUsers: this.context.users });
   }
 
   componentDidUpdate(

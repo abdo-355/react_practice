@@ -1,5 +1,4 @@
 import UserFinder from "./components/UserFinder";
-import Users from "./components/Users";
 import UsersContext from "./store/users-context";
 
 const DUMMY_USERS = [
@@ -16,7 +15,6 @@ const App: React.FC = () => {
   return (
     <UsersContext.Provider value={usersContext}>
       <UserFinder />
-      <Users users={DUMMY_USERS} />
     </UsersContext.Provider>
   );
 };
