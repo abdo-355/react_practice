@@ -3,16 +3,13 @@ import User from "./User";
 
 import classes from "./Users.module.css";
 
-const DUMMY_USERS = [
-  { id: "u1", name: "Max" },
-  { id: "u2", name: "Manuel" },
-  { id: "u3", name: "Julie" },
-];
+interface Props {
+  users: { id: string; name: string }[];
+}
 
-class Users extends Component<{}, { showUsers: boolean; more: string }> {
+class Users extends Component<Props, { showUsers: boolean }> {
   state = {
     showUsers: true,
-    more: "lollol",
   };
 
   toggleUsersHandler = () => {
@@ -24,7 +21,7 @@ class Users extends Component<{}, { showUsers: boolean; more: string }> {
   render() {
     const usersList = (
       <ul>
-        {DUMMY_USERS.map((user) => (
+        {this.props.users.map((user) => (
           <User key={user.id} name={user.name} />
         ))}
       </ul>
