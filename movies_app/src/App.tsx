@@ -2,6 +2,8 @@ import { ReactNode, useState, useEffect, useCallback } from "react";
 
 import "./App.module.css";
 import MoviesList from "./components/MoviesList";
+import AddMovie from "./components/AddMovie";
+
 import { IMovie } from "./types/types";
 
 const App = () => {
@@ -41,6 +43,8 @@ const App = () => {
     onClickHandler();
   }, [onClickHandler]);
 
+  const AddMovieHandler = (movie: IMovie) => {};
+
   let content: ReactNode = <p>"No Movies found"</p>;
 
   if (movies.length === 0) {
@@ -61,6 +65,9 @@ const App = () => {
 
   return (
     <>
+      <section>
+        <AddMovie onAddMovie={AddMovieHandler} />
+      </section>
       <section>
         <button onClick={onClickHandler}>Fetch Movies</button>
       </section>
