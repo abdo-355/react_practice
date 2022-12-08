@@ -1,30 +1,45 @@
+import { MouseEvent, useState } from "react";
+
 import "./App.module.css";
 import MoviesList from "./components/MoviesList";
+import { IMovie } from "./types/types";
 
 const App = () => {
-  const dummyMovies = [
-    {
-      id: 1,
-      title: "Some Dummy Movie",
-      openingText: "This is the opening text of the movie",
-      releaseDate: "2021-05-18",
-    },
-    {
-      id: 2,
-      title: "Some Dummy Movie 2",
-      openingText: "This is the second opening text of the movie",
-      releaseDate: "2021-05-19",
-    },
-  ];
+  const [movies, setMovies] = useState<IMovie[]>([]);
+
+  const onClickHandler = async (e: MouseEvent<HTMLButtonElement>) => {
+    try {
+      const response = await fetch("https://swapi.dev/api/films");
+
+      const data = await response.json();
+
+      const transformedData = data.results.map((movieData: any): IMovie => {
+        return {
+          id: movieData.episode_id,
+          title: movieData.title,
+          openingText: movieData.opening_crawl,
+          releaseDate: movieData.release_date,
+        };
+      });
+
+      setMovies(transformedData);
+
+      console.log(movies);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <>
       <section>
-        <button>Fetch Movies</button>
+        <button onClick={onClickHandler}>Fetch Movies</button>
       </section>
-      <section>
-        <MoviesList movies={dummyMovies} />
-      </section>
+      {movies.length === 0 ? null : (
+        <section>
+          <MoviesList movies={movies} />
+        </section>
+      )}
     </>
   );
 };
