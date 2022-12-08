@@ -6,9 +6,11 @@ import { IMovie } from "./types/types";
 
 const App = () => {
   const [movies, setMovies] = useState<IMovie[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const onClickHandler = async (e: MouseEvent<HTMLButtonElement>) => {
     try {
+      setIsLoading(true);
       const response = await fetch("https://swapi.dev/api/films");
 
       const data = await response.json();
@@ -23,8 +25,7 @@ const App = () => {
       });
 
       setMovies(transformedData);
-
-      console.log(movies);
+      setIsLoading(false);
     } catch (err) {
       console.log(err);
     }
@@ -35,11 +36,11 @@ const App = () => {
       <section>
         <button onClick={onClickHandler}>Fetch Movies</button>
       </section>
-      {movies.length === 0 ? null : (
-        <section>
-          <MoviesList movies={movies} />
-        </section>
-      )}
+      <section>
+        {!isLoading && movies.length > 0 && <MoviesList movies={movies} />}
+        {!isLoading && movies.length === 0 && <p>No movies found</p>}
+        {isLoading && <p>Loading...</p>}
+      </section>
     </>
   );
 };
