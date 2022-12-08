@@ -1,4 +1,4 @@
-import { MouseEvent, ReactNode, useState } from "react";
+import { ReactNode, useState, useEffect, useCallback } from "react";
 
 import "./App.module.css";
 import MoviesList from "./components/MoviesList";
@@ -9,10 +9,10 @@ const App = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
 
-  const onClickHandler = async (e: MouseEvent<HTMLButtonElement>) => {
+  const onClickHandler = useCallback(async () => {
     try {
       setIsLoading(true);
-      const response = await fetch("https://swapi.dev/api/film");
+      const response = await fetch("https://swapi.dev/api/films");
 
       if (!response.ok) {
         throw new Error("Something went wrong!");
@@ -35,7 +35,11 @@ const App = () => {
       setError(err);
       setIsLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    onClickHandler();
+  }, [onClickHandler]);
 
   let content: ReactNode = <p>"No Movies found"</p>;
 
