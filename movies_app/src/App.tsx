@@ -14,7 +14,9 @@ const App = () => {
   const onClickHandler = useCallback(async () => {
     try {
       setIsLoading(true);
-      const response = await fetch("https://swapi.dev/api/films");
+      const response = await fetch(
+        `${process.env.REACT_APP_FIREBASE_DB}/movies.json`
+      );
 
       if (!response.ok) {
         throw new Error("Something went wrong!");
@@ -22,14 +24,16 @@ const App = () => {
 
       const data = await response.json();
 
-      const transformedData = data.results.map((movieData: any): IMovie => {
-        return {
-          id: movieData.episode_id,
-          title: movieData.title,
-          openingText: movieData.opening_crawl,
-          releaseDate: movieData.release_date,
-        };
-      });
+      const transformedData = Object.keys(data).map(
+        (movieId: string): IMovie => {
+          return {
+            id: movieId,
+            title: data[movieId].title,
+            openingText: data[movieId].openingText,
+            releaseDate: data[movieId].releaseDate,
+          };
+        }
+      );
 
       setMovies(transformedData);
       setIsLoading(false);
@@ -43,7 +47,18 @@ const App = () => {
     onClickHandler();
   }, [onClickHandler]);
 
-  const AddMovieHandler = (movie: IMovie) => {};
+  const AddMovieHandler = async (movie: IMovie) => {
+    const response = await fetch(
+      `${process.env.REACT_APP_FIREBASE_DB}/movies.json`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(movie),
+      }
+    );
+    const data = await response.json();
+    console.log(data);
+  };
 
   let content: ReactNode = <p>"No Movies found"</p>;
 
