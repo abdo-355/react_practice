@@ -11,27 +11,30 @@ const App = () => {
   const [tasks, setTasks] = useState<ITask[]>([]);
 
   const fetchTasks = async () => {
-    setIsLoading(true);
-    setError(null);
     try {
+      setIsLoading(true);
+      setError(null);
       const response = await fetch(
         `${process.env.REACT_APP_FIREBASE_DB}/tasks.json`
       );
 
-      if (!response.ok) {
+      if (!response.ok || !response) {
         throw new Error("Request failed!");
       }
-
       const data = await response.json();
 
-      const loadedTasks: ITask[] = Object.keys(data).map((taskId) => {
-        return {
-          id: taskId,
-          text: data[taskId].text,
-        };
-      });
+      if (data) {
+        const loadedTasks: ITask[] = Object.keys(data).map((taskId) => {
+          return {
+            id: taskId,
+            text: data[taskId].text,
+          };
+        });
 
-      setTasks(loadedTasks);
+        setTasks(loadedTasks);
+      } else {
+        setTasks([]);
+      }
     } catch (err: any) {
       setError(err.message || "Something went wrong!");
     }
