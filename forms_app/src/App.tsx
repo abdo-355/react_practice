@@ -1,5 +1,11 @@
+import SimpleInput from "./components/SimpleInput";
+
 const App = () => {
-  return <h1>Forms app</h1>;
+  return (
+    <div className="app">
+      <SimpleInput />
+    </div>
+  );
 };
 
 export default App;
