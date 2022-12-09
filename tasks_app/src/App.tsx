@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 
 import { ITask } from "./types/types";
 
@@ -9,25 +9,23 @@ import useRequest from "./hooks/useRequest";
 const App = () => {
   const [tasks, setTasks] = useState<ITask[]>([]);
 
-  const transformTasks = useCallback((tasksObj: any) => {
-    const loadedTasks: ITask[] = Object.keys(tasksObj).map((taskId) => {
-      return {
-        id: taskId,
-        text: tasksObj[taskId].text,
-      };
-    });
-
-    setTasks(loadedTasks);
-  }, []);
-
-  const {
-    isLoading,
-    error,
-    sendRequest: fetchTasks,
-  } = useRequest(transformTasks);
+  const { isLoading, error, sendRequest: fetchTasks } = useRequest();
 
   useEffect(() => {
-    fetchTasks({ url: `${process.env.REACT_APP_FIREBASE_DB}/tasks.json` });
+    const transformTasks = (tasksObj: any) => {
+      const loadedTasks: ITask[] = Object.keys(tasksObj).map((taskId) => {
+        return {
+          id: taskId,
+          text: tasksObj[taskId].text,
+        };
+      });
+
+      setTasks(loadedTasks);
+    };
+    fetchTasks(
+      { url: `${process.env.REACT_APP_FIREBASE_DB}/tasks.json` },
+      transformTasks
+    );
   }, [fetchTasks]);
 
   const taskAddHandler = (task: ITask) => {
@@ -41,9 +39,7 @@ const App = () => {
         items={tasks}
         loading={isLoading}
         error={error}
-        onFetch={() =>
-          fetchTasks({ url: `${process.env.REACT_APP_FIREBASE_DB}/tasks.json` })
-        }
+        // onFetch={fetchTasks}
       />
     </>
   );

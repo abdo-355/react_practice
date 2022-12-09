@@ -8,10 +8,10 @@ interface Props {
   items: ITask[];
   loading: boolean;
   error: Error | null;
-  onFetch: () => Promise<void>;
+  // onFetch: () => Promise<void>;
 }
 
-const Tasks: React.FC<Props> = ({ items, loading, error, onFetch }) => {
+const Tasks: React.FC<Props> = ({ items, loading, error }) => {
   let taskList = <h2>No tasks found. Start adding some!</h2>;
 
   if (items.length > 0) {
@@ -27,7 +27,7 @@ const Tasks: React.FC<Props> = ({ items, loading, error, onFetch }) => {
   let content: JSX.Element | string = taskList;
 
   if (error) {
-    content = <button onClick={onFetch}>Try again</button>;
+    content = <button>Try again</button>;
   }
 
   if (loading) {
