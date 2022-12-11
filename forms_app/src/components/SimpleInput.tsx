@@ -2,33 +2,25 @@ import { useState, ChangeEvent, FormEvent, FocusEvent } from "react";
 
 const SimpleInput = () => {
   const [enteredName, setEnteredName] = useState("");
-  const [enteredNameIsValid, setEnteredNameIsValid] = useState(false);
   const [nameInputTouched, setNameInputTouched] = useState(false);
+
+  const enteredNameIsValid = enteredName.trim() !== "";
 
   const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setEnteredName(e.target.value);
-    setEnteredNameIsValid(true);
   };
 
   const onBlurHandler = (e: FocusEvent<HTMLInputElement>) => {
     setNameInputTouched(true);
-
-    if (enteredName.trim() === "") {
-      setEnteredNameIsValid(false);
-      return;
-    }
   };
 
   const onSubmitHandler = (e: FormEvent) => {
     e.preventDefault();
 
     setNameInputTouched(true);
-
-    if (enteredName.trim() === "") {
-      setEnteredNameIsValid(false);
+    if (!enteredNameIsValid) {
       return;
     }
-
     console.log(enteredName);
 
     setEnteredName("");
