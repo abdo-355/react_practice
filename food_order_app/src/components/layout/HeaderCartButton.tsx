@@ -1,6 +1,7 @@
 import { MouseEventHandler, useContext, useState, useEffect } from "react";
 
 import CartContext from "../../store/CartContext";
+import CartIcon from "../Cart/CartIcon";
 import styles from "./HeaderCartButton.module.css";
 
 interface Props {
@@ -37,7 +38,9 @@ const HeaderCartButton: React.FC<Props> = ({ onClick }) => {
 
   return (
     <button className={btnClasses} onClick={onClick}>
-      <span className={styles.icon}>{/* CartIcon goes here */}</span>
+      <span className={styles.icon}>
+        <CartIcon />
+      </span>
       <span>Your Cart</span>
       <span className={styles.badge}>{numberOfCartItems}</span>
     </button>
