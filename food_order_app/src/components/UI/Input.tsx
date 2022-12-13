@@ -14,7 +14,7 @@ interface Props {
   };
 }
 
-const Input = forwardRef<any, Props>((props, ref) => {
+const Input = forwardRef<HTMLInputElement, Props>((props, ref) => {
   return (
     <div className={styles.input}>
       <label htmlFor={props.input.id}>{props.label}</label>
