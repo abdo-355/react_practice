@@ -29,7 +29,7 @@ const MealItem: React.FC<Partial<Item>> = ({
       <div>
         <h3>{name}</h3>
         <div className={styles.description}>{description}</div>
-        <div className={styles.price}>{price}</div>
+        <div className={styles.price}>${price}</div>
       </div>
       <div>
         <MealItemForm onAddToCart={addToCartHandler} />

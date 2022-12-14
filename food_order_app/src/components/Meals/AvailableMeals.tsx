@@ -1,36 +1,36 @@
 import Card from "../UI/Card";
+import { useEffect, useState } from "react";
+
 import styles from "./AvailableMeals.module.css";
+import { Item } from "../../types/types";
 import MealItem from "./MealItem/MealItem";
 
-const DUMMY_MEALS = [
-  {
-    id: "m1",
-    name: "Sushi",
-    description: "Finest fish and veggies",
-    price: 22.99,
-  },
-  {
-    id: "m2",
-    name: "Schnitzel",
-    description: "A german specialty!",
-    price: 16.5,
-  },
-  {
-    id: "m3",
-    name: "Barbecue Burger",
-    description: "American, raw, meaty",
-    price: 12.99,
-  },
-  {
-    id: "m4",
-    name: "Green Bowl",
-    description: "Healthy...and green...",
-    price: 18.99,
-  },
-];
-
 const AvailableMeals = () => {
-  const mealsList = DUMMY_MEALS.map((meal) => (
+  const [meals, setMeals] = useState<Item[]>([]);
+
+  useEffect(() => {
+    const fetchMeals = async () => {
+      const response = await fetch(
+        `${process.env.REACT_APP_DATABASE_URL!}/meals.json`
+      );
+      const data = await response.json();
+
+      const mealsData = Object.keys(data).map((mealId: string): Item => {
+        return {
+          id: mealId,
+          name: data[mealId].name,
+          description: data[mealId].description,
+          price: data[mealId].price,
+        };
+      });
+
+      setMeals(mealsData);
+    };
+
+    fetchMeals();
+  }, []);
+
+  const mealsList = meals.map((meal) => (
     <MealItem
       key={meal.id}
       id={meal.id}

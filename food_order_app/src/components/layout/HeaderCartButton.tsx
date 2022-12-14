@@ -15,7 +15,7 @@ const HeaderCartButton: React.FC<Props> = ({ onClick }) => {
   const { items } = cartCtx;
 
   const numberOfCartItems = items.reduce(
-    (curNumber, item) => curNumber + item.amount,
+    (curNumber, item) => curNumber + item.amount!,
     0
   );
 
