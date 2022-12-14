@@ -15,3 +15,10 @@ export interface ICartContext extends ICartState {
   addItem: (item: Item) => void;
   removeItem: (id: string) => void;
 }
+
+export interface IUserData {
+  name: string;
+  street: string;
+  city: string;
+  postalCode: string;
+}

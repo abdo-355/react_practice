@@ -1,9 +1,11 @@
 import { useRef, useState, MouseEventHandler, FormEventHandler } from "react";
 
 import styles from "./Checkout.module.css";
+import { IUserData } from "../../types/types";
 
 interface Props {
   onCancel: MouseEventHandler<HTMLButtonElement>;
+  onOrder: (userData: IUserData) => void;
 }
 
 // helper functions for form validation
@@ -11,7 +13,7 @@ const isEmpty = (value: string) => value.trim().length === 0;
 const isFiveChars = (value: string) => value.trim().length === 5;
 //---------------------------------------
 
-const Checkout: React.FC<Props> = ({ onCancel }) => {
+const Checkout: React.FC<Props> = ({ onCancel, onOrder }) => {
   const [formInputsValidity, setFormInputsValidity] = useState({
     name: true,
     street: true,
@@ -29,15 +31,15 @@ const Checkout: React.FC<Props> = ({ onCancel }) => {
   const submitHandler: FormEventHandler = (e) => {
     e.preventDefault();
 
-    const entredName = nameRef.current!.value;
-    const entredStreet = streetRef.current!.value;
-    const entredCity = cityRef.current!.value;
-    const entredPostalCode = postalCodeRef.current!.value;
+    const enteredName = nameRef.current!.value;
+    const enteredStreet = streetRef.current!.value;
+    const enteredCity = cityRef.current!.value;
+    const enteredPostalCode = postalCodeRef.current!.value;
 
-    const enteredNameIsValid = !isEmpty(entredName);
-    const enteredStreetIsValid = !isEmpty(entredStreet);
-    const enteredCityIsValid = !isEmpty(entredCity);
-    const enteredPostalCodeIsValid = isFiveChars(entredPostalCode);
+    const enteredNameIsValid = !isEmpty(enteredName);
+    const enteredStreetIsValid = !isEmpty(enteredStreet);
+    const enteredCityIsValid = !isEmpty(enteredCity);
+    const enteredPostalCodeIsValid = isFiveChars(enteredPostalCode);
 
     setFormInputsValidity({
       name: enteredNameIsValid,
@@ -56,7 +58,12 @@ const Checkout: React.FC<Props> = ({ onCancel }) => {
       return;
     }
 
-    // submit the cart data
+    onOrder({
+      name: enteredName,
+      street: enteredStreet,
+      city: enteredCity,
+      postalCode: enteredPostalCode,
+    });
   };
 
   const nameControlStyles = `${styles.control} ${
@@ -72,6 +79,7 @@ const Checkout: React.FC<Props> = ({ onCancel }) => {
   const postalCodeControlStyles = `${styles.control} ${
     formInputsValidity.postalCode ? "" : styles.invalid
   }`;
+
   return (
     <form className={styles.form} onSubmit={submitHandler}>
       <div className={nameControlStyles}>

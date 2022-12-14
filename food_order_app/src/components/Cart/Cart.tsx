@@ -4,7 +4,7 @@ import Modal from "../UI/Modal";
 import CartItem from "./CartItem";
 import Checkout from "./Checkout";
 import CartContext from "../../store/CartContext";
-import { Item } from "../../types/types";
+import { Item, IUserData } from "../../types/types";
 import styles from "./Cart.module.css";
 
 interface Props {
@@ -24,6 +24,16 @@ const Cart: React.FC<Props> = ({ onClose }) => {
 
   const cartItemAddHandler = (item: Item) => {
     cartCtx.addItem(item);
+  };
+
+  const submitOrder = (userData: IUserData) => {
+    fetch(`${process.env.REACT_APP_DATABASE_URL!}/orders.json`, {
+      method: "POST",
+      body: JSON.stringify({
+        user: userData,
+        orderItems: cartCtx.items,
+      }),
+    });
   };
 
   const cartItems = (
@@ -61,7 +71,7 @@ const Cart: React.FC<Props> = ({ onClose }) => {
         <span>Total Amount</span>
         <span>{totalAmount}</span>
       </div>
-      {isCheckout && <Checkout onCancel={onClose} />}
+      {isCheckout && <Checkout onOrder={submitOrder} onCancel={onClose} />}
       {!isCheckout && modalActions}
     </Modal>
   );
