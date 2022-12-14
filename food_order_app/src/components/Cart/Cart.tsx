@@ -1,7 +1,8 @@
-import { useContext, MouseEventHandler } from "react";
+import { useContext, useState, MouseEventHandler } from "react";
 
 import Modal from "../UI/Modal";
 import CartItem from "./CartItem";
+import Checkout from "./Checkout";
 import CartContext from "../../store/CartContext";
 import { Item } from "../../types/types";
 import styles from "./Cart.module.css";
@@ -11,6 +12,7 @@ interface Props {
 }
 
 const Cart: React.FC<Props> = ({ onClose }) => {
+  const [isCheckout, setIsCheckout] = useState(false);
   const cartCtx = useContext(CartContext);
 
   const totalAmount = `$${cartCtx.totalAmount.toFixed(2)}`;
@@ -39,6 +41,19 @@ const Cart: React.FC<Props> = ({ onClose }) => {
     </ul>
   );
 
+  const modalActions = (
+    <div className={styles.actions}>
+      <button className={styles["button--alt"]} onClick={onClose}>
+        Close
+      </button>
+      {hasItems && (
+        <button className={styles.button} onClick={() => setIsCheckout(true)}>
+          Order
+        </button>
+      )}
+    </div>
+  );
+
   return (
     <Modal onClose={onClose}>
       {cartItems}
@@ -46,12 +61,8 @@ const Cart: React.FC<Props> = ({ onClose }) => {
         <span>Total Amount</span>
         <span>{totalAmount}</span>
       </div>
-      <div className={styles.actions}>
-        <button className={styles["button--alt"]} onClick={onClose}>
-          Close
-        </button>
-        {hasItems && <button className={styles.button}>Order</button>}
-      </div>
+      {isCheckout && <Checkout onCancel={onClose} />}
+      {!isCheckout && modalActions}
     </Modal>
   );
 };
