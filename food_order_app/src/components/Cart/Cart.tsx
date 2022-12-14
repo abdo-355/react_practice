@@ -13,6 +13,8 @@ interface Props {
 
 const Cart: React.FC<Props> = ({ onClose }) => {
   const [isCheckout, setIsCheckout] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [didSubmit, setDidSubmit] = useState(false);
   const cartCtx = useContext(CartContext);
 
   const totalAmount = `$${cartCtx.totalAmount.toFixed(2)}`;
@@ -26,14 +28,22 @@ const Cart: React.FC<Props> = ({ onClose }) => {
     cartCtx.addItem(item);
   };
 
-  const submitOrder = (userData: IUserData) => {
-    fetch(`${process.env.REACT_APP_DATABASE_URL!}/orders.json`, {
+  const submitOrder = async (userData: IUserData) => {
+    setIsSubmitting(true);
+
+    // we can add error handling but i'm not going to do it to save time
+    await fetch(`${process.env.REACT_APP_DATABASE_URL!}/orders.json`, {
       method: "POST",
       body: JSON.stringify({
         user: userData,
         orderItems: cartCtx.items,
       }),
     });
+
+    setIsSubmitting(false);
+    setDidSubmit(true);
+
+    cartCtx.clearCart();
   };
 
   const cartItems = (
@@ -64,8 +74,8 @@ const Cart: React.FC<Props> = ({ onClose }) => {
     </div>
   );
 
-  return (
-    <Modal onClose={onClose}>
+  const modalContent = (
+    <>
       {cartItems}
       <div className={styles.total}>
         <span>Total Amount</span>
@@ -73,6 +83,27 @@ const Cart: React.FC<Props> = ({ onClose }) => {
       </div>
       {isCheckout && <Checkout onOrder={submitOrder} onCancel={onClose} />}
       {!isCheckout && modalActions}
+    </>
+  );
+
+  const isSubmittingModalContent = <p>Sending order data...</p>;
+
+  const didSubmitModalContent = (
+    <>
+      <p>Successfully sent the order!</p>
+      <div className={styles.actions}>
+        <button className={styles.button} onClick={onClose}>
+          Close
+        </button>
+      </div>
+    </>
+  );
+
+  return (
+    <Modal onClose={onClose}>
+      {!isSubmitting && !didSubmit && modalContent}
+      {isSubmitting && isSubmittingModalContent}
+      {!isSubmitting && didSubmit && didSubmitModalContent}
     </Modal>
   );
 };

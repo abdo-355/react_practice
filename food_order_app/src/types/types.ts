@@ -14,6 +14,7 @@ export interface ICartState {
 export interface ICartContext extends ICartState {
   addItem: (item: Item) => void;
   removeItem: (id: string) => void;
+  clearCart: () => void;
 }
 
 export interface IUserData {

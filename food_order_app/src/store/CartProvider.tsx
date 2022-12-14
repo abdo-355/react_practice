@@ -11,6 +11,7 @@ const initialCartState: ICartState = {
 enum actionTypes {
   ADD,
   REMOVE,
+  CLEAR_CART,
 }
 
 interface CartActions {
@@ -85,6 +86,9 @@ const cartReducer: Reducer<ICartState, CartActions> = (
         totalAmount: updatedTotalAmount,
       };
     }
+    case actionTypes.CLEAR_CART: {
+      return { items: [], totalAmount: 0 };
+    }
     default:
       return initialCartState;
   }
@@ -104,11 +108,16 @@ const CartProvider: React.FC<Props> = ({ children }) => {
     dispatchCartAction({ type: actionTypes.REMOVE, payload: { id } });
   };
 
+  const clearCartHandler = () => {
+    dispatchCartAction({ type: actionTypes.CLEAR_CART });
+  };
+
   const cartContextValue = {
     items: cartState.items,
     totalAmount: cartState.totalAmount,
     addItem: addItemToCartHandler,
     removeItem: removeItemFromCartHandler,
+    clearCart: clearCartHandler,
   };
 
   return (
