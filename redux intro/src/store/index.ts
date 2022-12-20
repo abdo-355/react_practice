@@ -1,20 +1,20 @@
 import { configureStore, Reducer } from "@reduxjs/toolkit";
 
-enum actionTypes {
+export enum actionTypes {
   INCREMENT,
   DECREMENT,
 }
 
-interface IState {
+export interface IRootState {
   count: number;
 }
 
-interface IAction {
+export interface IAction {
   type: actionTypes;
   payload: any;
 }
 
-const counterReducer: Reducer<IState> = (state = { count: 0 }, action) => {
+const counterReducer: Reducer<IRootState> = (state = { count: 0 }, action) => {
   switch (action.type) {
     case actionTypes.INCREMENT:
       return {
@@ -29,4 +29,4 @@ const counterReducer: Reducer<IState> = (state = { count: 0 }, action) => {
   return state;
 };
 
-export default configureStore<IState, IAction>({ reducer: counterReducer });
+export default configureStore<IRootState, IAction>({ reducer: counterReducer });
