@@ -1,7 +1,8 @@
 import { MouseEventHandler } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
-import { IRootState, actionTypes } from "../store";
+import { IRootState } from "../store";
+import { increment, increase, decrement } from "../store/slice";
 import styles from "./Counter.module.css";
 
 const Counter = () => {
@@ -10,11 +11,15 @@ const Counter = () => {
   const count = useSelector((state: IRootState) => state.count);
 
   const incrementHandler: MouseEventHandler<HTMLButtonElement> = (e) => {
-    dispatch({ type: actionTypes.INCREMENT });
+    dispatch(increment());
+  };
+
+  const increaseHandler: MouseEventHandler<HTMLButtonElement> = (e) => {
+    dispatch(increase(5));
   };
 
   const decrementHandler: MouseEventHandler<HTMLButtonElement> = (e) => {
-    dispatch({ type: actionTypes.DECREMENT });
+    dispatch(decrement());
   };
 
   const toggleCounterHandler = () => {};
@@ -25,6 +30,7 @@ const Counter = () => {
       <div className={styles.value}>{count}</div>
       <div>
         <button onClick={incrementHandler}>Increment</button>
+        <button onClick={increaseHandler}>increase by 5</button>
         <button onClick={decrementHandler}>Decrement</button>
       </div>
       <button onClick={toggleCounterHandler}>Toggle Counter</button>
