@@ -1,33 +1,36 @@
-import { MouseEventHandler } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
-import { IRootState } from "../store";
-import { increment, increase, decrement } from "../store/slice";
+import { RootState } from "../store";
+import { increment, increase, decrement } from "../store/counterSlice";
+import { toggle } from "../store/togglerSlice";
 import styles from "./Counter.module.css";
 
 const Counter = () => {
   const dispatch = useDispatch();
 
-  const count = useSelector((state: IRootState) => state.count);
+  const count = useSelector((state: RootState) => state.counter.count);
+  const isVisible = useSelector((state: RootState) => state.toggler.isVisible);
 
-  const incrementHandler: MouseEventHandler<HTMLButtonElement> = (e) => {
+  const incrementHandler = () => {
     dispatch(increment());
   };
 
-  const increaseHandler: MouseEventHandler<HTMLButtonElement> = (e) => {
+  const increaseHandler = () => {
     dispatch(increase(5));
   };
 
-  const decrementHandler: MouseEventHandler<HTMLButtonElement> = (e) => {
+  const decrementHandler = () => {
     dispatch(decrement());
   };
 
-  const toggleCounterHandler = () => {};
+  const toggleCounterHandler = () => {
+    dispatch(toggle());
+  };
 
   return (
     <main className={styles.counter}>
       <h1>Redux Counter</h1>
-      <div className={styles.value}>{count}</div>
+      {isVisible && <div className={styles.value}>{count}</div>}
       <div>
         <button onClick={incrementHandler}>Increment</button>
         <button onClick={increaseHandler}>increase by 5</button>

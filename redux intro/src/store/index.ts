@@ -1,8 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
-import counterReducer from "./slice";
+import counterReducer from "./counterSlice";
+import togglerReducer from "./togglerSlice";
 
-export interface IRootState {
-  count: number;
-}
+const store = configureStore({
+  reducer: { counter: counterReducer, toggler: togglerReducer },
+});
 
-export default configureStore({ reducer: counterReducer });
+export type RootState = ReturnType<typeof store.getState>;
+
+export default store;
