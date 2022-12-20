@@ -1,15 +1,14 @@
 import { useSelector, useDispatch } from "react-redux";
 
 import { RootState } from "../store";
-import { increment, increase, decrement } from "../store/counterSlice";
-import { toggle } from "../store/togglerSlice";
+import { increment, increase, decrement, toggle } from "../store/counterSlice";
 import styles from "./Counter.module.css";
 
 const Counter = () => {
   const dispatch = useDispatch();
 
   const count = useSelector((state: RootState) => state.counter.count);
-  const isVisible = useSelector((state: RootState) => state.toggler.isVisible);
+  const isVisible = useSelector((state: RootState) => state.counter.isVisible);
 
   const incrementHandler = () => {
     dispatch(increment());
