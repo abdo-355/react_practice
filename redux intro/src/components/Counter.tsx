@@ -1,7 +1,12 @@
 import { useSelector, useDispatch } from "react-redux";
 
 import { RootState } from "../store";
-import { increment, increase, decrement, toggle } from "../store/counterSlice";
+import {
+  increment,
+  increase,
+  decrement,
+  toggle,
+} from "../store/slices/counterSlice";
 import styles from "./Counter.module.css";
 
 const Counter = () => {
