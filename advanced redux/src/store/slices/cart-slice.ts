@@ -1,10 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-interface ICartItem {
+export interface ICartItem {
   id: string;
   title: string;
   price: number;
-  amount: number;
+  quantity: number;
   total: number;
 }
 
@@ -12,7 +12,7 @@ interface INewItem {
   id: string;
   title: string;
   price: number;
-  description: string;
+  description?: string;
 }
 
 const cartInitialState = {
@@ -34,13 +34,13 @@ const CartSlice = createSlice({
       if (!existingItem) {
         state.items.push({
           id: newItem.id,
-          amount: 1,
+          quantity: 1,
           price: newItem.price,
           title: newItem.title,
           total: newItem.price,
         });
       } else {
-        existingItem.amount++;
+        existingItem.quantity++;
         existingItem.total += newItem.price;
       }
     },
@@ -52,10 +52,10 @@ const CartSlice = createSlice({
 
       if (!existingItem) {
         return;
-      } else if (existingItem.amount === 1) {
+      } else if (existingItem.quantity === 1) {
         state.items = state.items.filter((item) => item.id !== id);
       } else {
-        existingItem.amount--;
+        existingItem.quantity--;
         existingItem.total -= existingItem.price;
       }
     },
