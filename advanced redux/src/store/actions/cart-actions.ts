@@ -1,7 +1,12 @@
 import { Dispatch } from "@reduxjs/toolkit";
 
-import { ICart, replaceCart } from "../slices/cart-slice";
+import { ICart, replaceCart, ICartItem } from "../slices/cart-slice";
 import { showNotification } from "../slices/ui-slice";
+
+export interface IFetchedCart {
+  items: ICartItem[];
+  totalQuantity: number;
+}
 
 export const sendCartData = (cart: ICart) => async (dispatch: Dispatch) => {
   try {
@@ -15,7 +20,10 @@ export const sendCartData = (cart: ICart) => async (dispatch: Dispatch) => {
 
     const res = await fetch(`${import.meta.env.VITE_FIREBASE_URL}/cart.json`, {
       method: "PUT",
-      body: JSON.stringify(cart),
+      body: JSON.stringify({
+        items: cart.items,
+        totalQuantity: cart.totalQuantity,
+      }),
     });
 
     if (!res.ok) {
@@ -48,7 +56,7 @@ export const fetchCart = () => async (dispatch: Dispatch) => {
       throw new Error("Could not fetch cart data");
     }
 
-    const data: ICart = await res.json();
+    const data: IFetchedCart = await res.json();
 
     return data;
   };
@@ -56,7 +64,12 @@ export const fetchCart = () => async (dispatch: Dispatch) => {
   try {
     const cartData = await fetchData();
 
-    dispatch(replaceCart(cartData));
+    dispatch(
+      replaceCart({
+        items: cartData.items || [],
+        totalQuantity: cartData.totalQuantity,
+      })
+    );
   } catch (err) {
     dispatch(
       showNotification({

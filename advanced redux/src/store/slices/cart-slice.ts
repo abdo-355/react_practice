@@ -1,5 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
+import { IFetchedCart } from "../actions/cart-actions";
+
 export interface ICartItem {
   id: string;
   title: string;
@@ -15,21 +17,22 @@ interface INewItem {
   description?: string;
 }
 
-export interface ICart {
-  items: ICartItem[];
-  totalQuantity: number;
+// cart fetched from the DB in cart-actions + the changed property
+export interface ICart extends IFetchedCart {
+  changed: boolean;
 }
 
 const cartInitialState: ICart = {
   items: [],
   totalQuantity: 0,
+  changed: false,
 };
 
 const CartSlice = createSlice({
   name: "cart",
   initialState: cartInitialState,
   reducers: {
-    replaceCart: (state, action: PayloadAction<ICart>) => {
+    replaceCart: (state, action: PayloadAction<IFetchedCart>) => {
       state.items = action.payload.items;
       state.totalQuantity = action.payload.totalQuantity;
     },
@@ -37,6 +40,7 @@ const CartSlice = createSlice({
       const newItem = action.payload;
       const existingItem = state.items.find((item) => item.id === newItem.id);
       state.totalQuantity++;
+      state.changed = true;
 
       if (!existingItem) {
         state.items.push({
@@ -56,6 +60,7 @@ const CartSlice = createSlice({
       const id = action.payload;
       const existingItem = state.items.find((item) => item.id === id);
       state.totalQuantity--;
+      state.changed = true;
 
       if (!existingItem) {
         return;
