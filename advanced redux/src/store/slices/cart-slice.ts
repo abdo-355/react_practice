@@ -15,11 +15,14 @@ interface INewItem {
   description?: string;
 }
 
-const cartInitialState = {
-  items: [] as ICartItem[],
-  // for the cart button
+export interface ICart {
+  items: ICartItem[];
+  totalQuantity: number;
+}
+
+const cartInitialState: ICart = {
+  items: [],
   totalQuantity: 0,
-  //--------------------
 };
 
 const CartSlice = createSlice({

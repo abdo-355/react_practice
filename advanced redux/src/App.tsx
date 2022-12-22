@@ -5,13 +5,13 @@ import Cart from "./components/Cart";
 import Layout from "./components/Layout";
 import Products from "./components/Shop/Products";
 import Notification from "./components/UI/Notification";
-import { RootState } from "./store";
-import { showNotification } from "./store/slices/ui-slice";
+import { RootState, AppDispatch } from "./store";
+import sendCartData from "./store/actions/send-cart-data";
 
 let isInitial = true;
 
 const App = () => {
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
 
   const cartIsVisible = useSelector(
     (state: RootState) => state.ui.cartIsVisible
@@ -19,53 +19,13 @@ const App = () => {
   const cart = useSelector((state: RootState) => state.cart);
   const notification = useSelector((state: RootState) => state.ui.notification);
 
-  console.log(notification);
-
   useEffect(() => {
-    const sendCartData = async () => {
-      dispatch(
-        showNotification({
-          status: "pending",
-          title: "Sending...",
-          message: "Sending cart data",
-        })
-      );
-
-      const res = await fetch(
-        `${import.meta.env.VITE_FIREBASE_URL}/cart.json`,
-        {
-          method: "PUT",
-          body: JSON.stringify(cart),
-        }
-      );
-
-      if (!res.ok) {
-        throw new Error("Sending Failed!");
-      }
-
-      dispatch(
-        showNotification({
-          status: "success",
-          title: "Success",
-          message: "Cart data sent successfully",
-        })
-      );
-    };
-
     if (isInitial) {
       isInitial = false;
       return;
     }
 
-    sendCartData().catch((err) => {
-      dispatch(
-        showNotification({
-          status: "error",
-          title: "Error!",
-          message: "Sending cart data failed",
-        })
-      );
-    });
+    dispatch(sendCartData(cart));
   }, [cart, dispatch]);
 
   return (
