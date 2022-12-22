@@ -1,9 +1,9 @@
 import { Dispatch } from "@reduxjs/toolkit";
 
-import { ICart } from "../slices/cart-slice";
+import { ICart, replaceCart } from "../slices/cart-slice";
 import { showNotification } from "../slices/ui-slice";
 
-const sendCartData = (cart: ICart) => async (dispatch: Dispatch) => {
+export const sendCartData = (cart: ICart) => async (dispatch: Dispatch) => {
   try {
     dispatch(
       showNotification({
@@ -40,4 +40,30 @@ const sendCartData = (cart: ICart) => async (dispatch: Dispatch) => {
   }
 };
 
-export default sendCartData;
+export const fetchCart = () => async (dispatch: Dispatch) => {
+  const fetchData = async () => {
+    const res = await fetch(`${import.meta.env.VITE_FIREBASE_URL}/cart.json`);
+
+    if (!res.ok) {
+      throw new Error("Could not fetch cart data");
+    }
+
+    const data: ICart = await res.json();
+
+    return data;
+  };
+
+  try {
+    const cartData = await fetchData();
+
+    dispatch(replaceCart(cartData));
+  } catch (err) {
+    dispatch(
+      showNotification({
+        status: "error",
+        title: "Error!",
+        message: "Sending cart data failed",
+      })
+    );
+  }
+};
