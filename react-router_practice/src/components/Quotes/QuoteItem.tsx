@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 import styles from "./QuoteItem.module.css";
 import { IQuote } from "../../types/types";
 
@@ -5,7 +7,7 @@ interface Props extends IQuote {
   id: string;
 }
 
-const QuoteItem: React.FC<Props> = ({ text, author }) => {
+const QuoteItem: React.FC<Props> = ({ id, text, author }) => {
   return (
     <li className={styles.item}>
       <figure>
@@ -14,9 +16,9 @@ const QuoteItem: React.FC<Props> = ({ text, author }) => {
         </blockquote>
         <figcaption>{author}</figcaption>
       </figure>
-      <a href="/" className="btn">
+      <Link to={`/quotes/${id}`} className="btn">
         View Fullscreen
-      </a>
+      </Link>
     </li>
   );
 };
