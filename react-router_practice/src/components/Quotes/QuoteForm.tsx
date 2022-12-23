@@ -1,4 +1,5 @@
-import { useRef, FormEventHandler } from "react";
+import { useRef, useState, FormEventHandler } from "react";
+import { Prompt } from "react-router-dom";
 
 import Card from "../UI/Card";
 import LoadingSpinner from "../UI/LoadingSpinner";
@@ -11,6 +12,8 @@ interface Props {
 }
 
 const QuoteForm: React.FC<Props> = ({ isLoading, onAddQuote }) => {
+  const [isTyping, setIsTyping] = useState(false);
+
   const authorInputRef = useRef<HTMLInputElement>(null);
   const textInputRef = useRef<HTMLTextAreaElement>(null);
 
@@ -25,28 +28,50 @@ const QuoteForm: React.FC<Props> = ({ isLoading, onAddQuote }) => {
     onAddQuote({ author: enteredAuthor, text: enteredText });
   };
 
-  return (
-    <Card>
-      <form className={styles.form} onSubmit={submitFormHandler}>
-        {isLoading && (
-          <div className={styles.loading}>
-            <LoadingSpinner />
-          </div>
-        )}
+  const formFocusHandler = () => {
+    setIsTyping(true);
+  };
 
-        <div className={styles.control}>
-          <label htmlFor="author">Author</label>
-          <input type="text" id="author" ref={authorInputRef} />
-        </div>
-        <div className={styles.control}>
-          <label htmlFor="text">Text</label>
-          <textarea id="text" rows={5} ref={textInputRef}></textarea>
-        </div>
-        <div className={styles.actions}>
-          <button className="btn">Add Quote</button>
-        </div>
-      </form>
-    </Card>
+  const finishTypingHandler = () => {
+    setIsTyping(false);
+  };
+
+  return (
+    <>
+      <Prompt
+        when={isTyping}
+        message={(location) =>
+          "are you sure you want to leave, All your entered data will be lost"
+        }
+      />
+      <Card>
+        <form
+          className={styles.form}
+          onFocus={formFocusHandler}
+          onSubmit={submitFormHandler}
+        >
+          {isLoading && (
+            <div className={styles.loading}>
+              <LoadingSpinner />
+            </div>
+          )}
+
+          <div className={styles.control}>
+            <label htmlFor="author">Author</label>
+            <input type="text" id="author" ref={authorInputRef} />
+          </div>
+          <div className={styles.control}>
+            <label htmlFor="text">Text</label>
+            <textarea id="text" rows={5} ref={textInputRef}></textarea>
+          </div>
+          <div className={styles.actions}>
+            <button onClick={finishTypingHandler} className="btn">
+              Add Quote
+            </button>
+          </div>
+        </form>
+      </Card>
+    </>
   );
 };
 
