@@ -1,4 +1,12 @@
-import { createContext, ReactNode, useState } from "react";
+import {
+  createContext,
+  ReactNode,
+  useState,
+  useEffect,
+  useCallback,
+} from "react";
+
+let logoutTimer: NodeJS.Timeout;
 
 interface IAuthContext {
   token: string | null;
@@ -25,25 +33,59 @@ const calcRemainingTime = (exp: string) => {
   return adjExperationTime - currentTime;
 };
 
+const retrieveStoredToken = () => {
+  const storedToken = localStorage.getItem("token");
+  const expTime = localStorage.getItem("expTime");
+
+  const remainingTime = calcRemainingTime(expTime!);
+
+  if (remainingTime <= 60000) {
+    localStorage.removeItem("token");
+    localStorage.removeItem("expTime");
+    return null;
+  }
+
+  return {
+    token: storedToken,
+    duration: remainingTime,
+  };
+};
+
 export const AuthContextProvider: React.FC<Props> = ({ children }) => {
-  const initialToken = localStorage.getItem("token");
+  const tokenData = retrieveStoredToken();
+  let initialToken = null;
+
+  if (tokenData) {
+    initialToken = tokenData.token;
+  }
+
   const [token, setToken] = useState(initialToken);
 
   const isLoggedIn = !!token;
 
-  const logout = () => {
+  const logout = useCallback(() => {
     setToken(null);
     localStorage.removeItem("token");
-  };
+    localStorage.removeItem("expTime");
+
+    if (logoutTimer) {
+      clearTimeout(logoutTimer);
+    }
+  }, []);
 
   const login = (recievedToken: string, expTime: string) => {
     setToken(recievedToken);
     localStorage.setItem("token", recievedToken);
+    localStorage.setItem("expTime", expTime);
 
     const reminingTime = calcRemainingTime(expTime);
 
-    setTimeout(logout, reminingTime);
+    logoutTimer = setTimeout(logout, reminingTime);
   };
+
+  useEffect(() => {
+    setTimeout(logout, tokenData?.duration);
+  }, [logout, tokenData]);
 
   return (
     <AuthContext.Provider value={{ token, isLoggedIn, login, logout }}>
