@@ -23,68 +23,40 @@ const AuthForm = () => {
 
     setIsLoading(true);
 
+    let url: string;
+
     if (isLogin) {
-      const res = await fetch(
-        `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${process.env.REACT_APP_FIREBASE_KEY}`,
-        {
-          method: "POST",
-          body: JSON.stringify({
-            email: enteredEmail,
-            password: enteredPassword,
-            returnSecureToken: true,
-          }),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      setIsLoading(false);
-
-      if (res.ok) {
-        const data = await res.json();
-
-        console.log(data);
-      } else {
-        const data = await res.json();
-        let errorMessage = "Sign up failed!";
-
-        if (data && data.error && data.error.message) {
-          errorMessage = data.error.message;
-        }
-
-        alert(errorMessage);
-      }
+      url = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${process.env.REACT_APP_FIREBASE_KEY}`;
     } else {
-      const res = await fetch(
-        `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${process.env.REACT_APP_FIREBASE_KEY}`,
-        {
-          method: "POST",
-          body: JSON.stringify({
-            email: enteredEmail,
-            password: enteredPassword,
-            returnSecureToken: true,
-          }),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      url = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${process.env.REACT_APP_FIREBASE_KEY}`;
+    }
 
-      setIsLoading(false);
+    const res = await fetch(url, {
+      method: "POST",
+      body: JSON.stringify({
+        email: enteredEmail,
+        password: enteredPassword,
+        returnSecureToken: true,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
 
-      if (res.ok) {
-        // TODO: use the returned data
-      } else {
-        const data = await res.json();
-        let errorMessage = "Sign up failed!";
+    setIsLoading(false);
 
-        if (data && data.error && data.error.message) {
-          errorMessage = data.error.message;
-        }
+    if (res.ok) {
+      const data = await res.json();
+      console.log(data);
+    } else {
+      const data = await res.json();
+      let errorMessage = "Sign up failed!";
 
-        alert(errorMessage);
+      if (data && data.error && data.error.message) {
+        errorMessage = data.error.message;
       }
+
+      alert(errorMessage);
     }
   };
 
