@@ -4,6 +4,7 @@ import styles from "./AuthForm.module.css";
 
 const AuthForm = () => {
   const [isLogin, setIsLogin] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
@@ -19,6 +20,8 @@ const AuthForm = () => {
     const enteredPassword = passwordRef.current!.value;
 
     // validation goes here
+
+    setIsLoading(true);
 
     if (isLogin) {
       // login
@@ -38,12 +41,19 @@ const AuthForm = () => {
         }
       );
 
+      setIsLoading(false);
+
       if (res.ok) {
         // TODO: use the returned data
       } else {
         const data = await res.json();
-        // TODO: some error handling
-        console.log(data);
+        let errorMessage = "Sign up failed!";
+
+        if (data && data.error && data.error.message) {
+          errorMessage = data.error.message;
+        }
+
+        alert(errorMessage);
       }
     }
   };
@@ -61,7 +71,12 @@ const AuthForm = () => {
           <input ref={passwordRef} type="password" id="password" required />
         </div>
         <div className={styles.actions}>
-          <button type="submit">{isLogin ? "Login" : "Create Account"}</button>
+          {!isLoading && (
+            <button type="submit">
+              {isLogin ? "Login" : "Create Account"}
+            </button>
+          )}
+          {isLoading && <p>Loading...</p>}
           <button
             type="button"
             className={styles.toggle}
