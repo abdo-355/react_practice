@@ -54,7 +54,8 @@ const AuthForm = () => {
       const data = await res.json();
 
       if (isLogin) {
-        authCtx.login(data.idToken);
+        const expTime = new Date(new Date().getTime() + +data.expiresIn * 1000);
+        authCtx.login(data.idToken, expTime.toISOString());
         history.replace("/");
       } else {
         setIsLogin(true);
