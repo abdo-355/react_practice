@@ -1,4 +1,5 @@
 import { useRef, useContext, FormEventHandler } from "react";
+import { useHistory } from "react-router-dom";
 
 import AuthContext from "../../store/auth-context";
 import styles from "./ProfileForm.module.css";
@@ -6,6 +7,8 @@ import styles from "./ProfileForm.module.css";
 const ProfileForm = () => {
   const passwordRef = useRef<HTMLInputElement>(null);
   const { token } = useContext(AuthContext);
+
+  const history = useHistory();
 
   const submitHandler: FormEventHandler = async (e) => {
     e.preventDefault();
@@ -30,7 +33,7 @@ const ProfileForm = () => {
     );
 
     if (res.ok) {
-      // TODO: use the returned data
+      history.replace("/");
     } else {
       const data = await res.json();
       let errorMessage = "updating the password failed!";
