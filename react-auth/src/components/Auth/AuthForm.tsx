@@ -1,10 +1,13 @@
-import { FormEventHandler, useState, useRef } from "react";
+import { FormEventHandler, useState, useRef, useContext } from "react";
 
+import AuthContext from "../../store/auth-context";
 import styles from "./AuthForm.module.css";
 
 const AuthForm = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+
+  const authCtx = useContext(AuthContext);
 
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
@@ -47,7 +50,12 @@ const AuthForm = () => {
 
     if (res.ok) {
       const data = await res.json();
-      console.log(data);
+
+      if (isLogin) {
+        authCtx.login(data.idToken);
+      } else {
+        setIsLogin(true);
+      }
     } else {
       const data = await res.json();
       let errorMessage = "Sign up failed!";
