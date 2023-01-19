@@ -1,7 +1,23 @@
-const List = () => {
+import { FC } from "react";
+
+import data from "./data";
+
+interface Props {
+  people: typeof data;
+}
+
+const List: FC<Props> = ({ people }) => {
   return (
     <>
-      <h2>list component</h2>
+      {people.map((person) => (
+        <article key={person.id} className="person">
+          <img src={person.image} alt={person.name} />
+          <div>
+            <h4>{person.name}</h4>
+            <p>{person.age} years</p>
+          </div>
+        </article>
+      ))}
     </>
   );
 };
