@@ -39,14 +39,10 @@ const props = {
   createTransaction: () => {},
 };
 
-test("on initial render the pay button should be disabled", async () => {
+test("the button is disabled initially and enabled if an amount and a note is entered", async () => {
   render(<TransactionCreateStepTwo {...props} />);
 
   expect(await screen.findByRole("button", { name: "Pay" })).toBeDisabled();
-});
-
-test("the button is enabled if an amount and a note is entered", async () => {
-  render(<TransactionCreateStepTwo {...props} />);
 
   userEvent.type(screen.getByPlaceholderText(/amount/i), "100");
   userEvent.type(screen.getByPlaceholderText(/add a note/i), "testing the button");
